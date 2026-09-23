@@ -50,3 +50,50 @@ router.get('/:id', (req, res) => {
     }
   });
 });
+// POST /api/orders
+router.post('/', (req, res) => {
+  const { customer, status, total } = req.body;
+  const trimmedCustomer = customer?.trim();
+
+  if (!trimmedCustomer || !status || total === undefined) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: "BAD_REQUEST",
+        message: "customer, status, and total are required."
+      }
+    });
+  }
+
+  const newOrder = { id: nextId++, customer: trimmedCustomer, status, total };
+  orders.push(newOrder);
+
+  res.status(201).json({
+    success: true,
+    data: newOrder,
+    meta: {
+      timestamp: new Date().toISOString(),
+      count: 1
+    }
+  });
+});
+
+// DELETE /api/orders/:id
+router.delete('/:id', (req, res) => {
+  const index = orders.findIndex(o => o.id === Number(req.params.id));
+
+  if (index === -1) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: "NOT_FOUND",
+        message: "Order not found."
+      }
+    });
+  }
+
+  orders.splice(index, 1);
+  res.status(204).send();
+});
+
+module.exports = router;
