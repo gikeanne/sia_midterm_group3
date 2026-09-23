@@ -88,3 +88,60 @@ count: 1
 })
 
 })
+
+  // POST product
+router.post('/', (req, res) => {
+
+    const { name, price } = req.body
+
+    if (!name || price === undefined) {
+        return res.status(400).json({
+            success: false,
+            error: {
+                code: 'BAD_REQUEST',
+                message: 'Name and price are required.'
+            }
+        })
+    }
+
+    const newProduct = {
+        id: products.length + 1,
+        name: name,
+        price: price
+    }
+
+    products.push(newProduct)
+
+    res.status(201).json({
+        success: true,
+        data: newProduct,
+        meta: {
+            timestamp: new Date().toISOString(),
+            count: 1
+        }
+    })
+})
+
+// DELETE product
+router.delete('/:id', (req, res) => {
+
+    const id = Number(req.params.id)
+
+    const index = products.findIndex(product => product.id === id)
+
+    if (index === -1) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                code: 'NOT_FOUND',
+                message: 'Product not found.'
+            }
+        })
+    }
+
+    products.splice(index, 1)
+
+    res.status(204).send()
+})
+
+module.exports = router
