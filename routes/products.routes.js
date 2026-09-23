@@ -51,3 +51,40 @@ count: result.length
 })
 
 })
+
+ // GET product by ID
+
+router.get('/:id', (req, res) => {
+
+const product = products.find(
+product => product.id ===
+Number (req.params.id)
+
+)
+
+if (!product) {
+return res.status(404).json({
+success: false,
+error:{
+code: 'NOT_FOUND',
+message: 'Product not found.'
+
+}
+
+})
+
+}
+
+res.status(200).json({
+success: true,
+data: product,
+meta: {
+
+timestamp: new
+Date().toISOString(),
+count: 1
+}
+
+})
+
+})
