@@ -7,16 +7,16 @@ let products = [
 {
 
 id: 1,
-name: 'Smartphone',
-price: 7000
+name: 'Laptop',
+price: 45000
 
 },
 
 {
 
 id: 2,
-name: 'LCD',
-price: 500
+name: 'Keyboard',
+price: 1500
 
 }
 
